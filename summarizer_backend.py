@@ -170,17 +170,8 @@ class AshbyCandidateSummarizer:
                         "required": ["score", "rationale"],
                         "additionalProperties": False
                     },
-                    "overall_fit": {
-                        "type": "object",
-                        "properties": {
-                            "score": {"type": "integer"},
-                            "rationale": {"type": "string"}
-                        },
-                        "required": ["score", "rationale"],
-                        "additionalProperties": False
-                    }
                 },
-                "required": ["past_experience", "education", "publications_research", "skills_tooling", "communication_clarity", "overall_fit"],
+                "required": ["past_experience", "education", "publications_research", "skills_tooling", "communication_clarity"],
                 "additionalProperties": False
             },
             "summary": {"type": "string"},
@@ -314,7 +305,6 @@ SCORING RULES:
 # 3) Experience highlights (bullets)
 # 4) Education (bullets or short)
 # 5) Risks/unknowns (bullets)
-# 6) Overall assessment and potential fit (short paragraph)
 # """
 #             max_tokens = 1000
 #         else:
