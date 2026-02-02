@@ -15,7 +15,134 @@
     .btn-primary { background: #5b7cfa; border: none; }
     .btn-outline-light { border-color: #2a3a63; color: #e8eefc; }
     .btn-outline-light:hover { background: rgba(91,124,250,.15); }
-    pre {
+    .btn-outline-light:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-slack { background: #4A154B; border: none; color: #fff; }
+    .btn-slack:hover { background: #611f69; color: #fff; }
+    .btn-slack:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Threshold controls */
+    .threshold-controls { font-size: 0.8rem; }
+    .threshold-label { color: #a9b7d6; }
+    .threshold-item { display: flex; align-items: center; gap: 4px; }
+    .threshold-item label { color: #a9b7d6; font-size: 0.75rem; }
+    .threshold-input {
+      width: 42px;
+      padding: 2px 4px;
+      background: #0f1730;
+      border: 1px solid #2a3a63;
+      border-radius: 4px;
+      color: #e8eefc;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    .threshold-input:focus { border-color: #5b7cfa; outline: none; }
+    .pill { border: 1px solid #2a3a63; border-radius: 999px; padding: .25rem .6rem; font-size: .85rem; }
+    .spinner-border { width: 1.2rem; height: 1.2rem; }
+    .smallmono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .select-help { font-size: .85rem; }
+
+    /* Summary UI styles */
+    #summaryContainer { min-height: 280px; }
+    .summary-placeholder { color: #e8eefc; padding: 2rem; text-align: center; }
+
+    /* Frontier lab indicator */
+    .frontier-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .frontier-indicator.is-frontier {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(37, 99, 235, 0.2));
+      border: 1px solid rgba(124, 58, 237, 0.5);
+    }
+    .frontier-indicator.not-frontier {
+      background: rgba(31, 42, 68, 0.5);
+      border: 1px solid #2a3a63;
+    }
+    .frontier-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .frontier-indicator.is-frontier .frontier-icon {
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+    }
+    .frontier-indicator.not-frontier .frontier-icon {
+      background: #2a3a63;
+    }
+    .frontier-text { flex: 1; }
+    .frontier-label { font-size: 0.75rem; color: #a9b7d6; text-transform: uppercase; letter-spacing: 0.5px; }
+    .frontier-value { font-size: 1rem; font-weight: 600; color: #ffffff; }
+
+    /* Scorecard */
+    .scorecard { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .score-item {
+      background: #0f1730;
+      border: 1px solid #2a3a63;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .score-label { font-size: 0.8rem; color: #e8eefc; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .score-value { display: flex; align-items: center; gap: 10px; }
+    .score-number { font-size: 1.5rem; font-weight: 700; min-width: 40px; }
+    .score-bar { flex: 1; height: 8px; background: #1f2a44; border-radius: 4px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+    .score-rationale { font-size: 0.85rem; color: #ffffff; margin-top: 8px; line-height: 1.4; }
+
+    /* Score colors */
+    .score-low { color: #ef4444; }
+    .score-low .score-bar-fill { background: linear-gradient(90deg, #ef4444, #f87171); }
+    .score-mid { color: #f59e0b; }
+    .score-mid .score-bar-fill { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .score-high { color: #10b981; }
+    .score-high .score-bar-fill { background: linear-gradient(90deg, #10b981, #34d399); }
+
+    /* Summary text */
+    .summary-text {
+      background: #0f1730;
+      border: 1px solid #2a3a63;
+      border-radius: 12px;
+      padding: 16px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    /* Lists */
+    .highlight-list, .flag-list { list-style: none; padding: 0; margin: 0; }
+    .highlight-list li, .flag-list li {
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: #ffffff;
+    }
+    .highlight-list li {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .highlight-list li::before { content: "✓"; color: #10b981; font-weight: bold; }
+    .flag-list li {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .flag-list li::before { content: "⚠"; color: #ef4444; }
+
+    /* Section headers */
+    .section-header { font-size: 0.85rem; font-weight: 600; color: #ffffff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Raw JSON fallback */
+    pre.raw-json {
       background: #0f1730;
       border: 1px solid #2a3a63;
       padding: 12px;
@@ -23,12 +150,8 @@
       color: #e8eefc;
       white-space: pre-wrap;
       margin-bottom: 0;
-      min-height: 280px;
+      font-size: 0.85rem;
     }
-    .pill { border: 1px solid #2a3a63; border-radius: 999px; padding: .25rem .6rem; font-size: .85rem; }
-    .spinner-border { width: 1.2rem; height: 1.2rem; }
-    .smallmono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .select-help { font-size: .85rem; }
   </style>
 </head>
 
@@ -39,9 +162,36 @@
       <h2 class="mb-1">Ashby CV Summarizer</h2>
       <div class="muted">Filter by <span class="smallmono">jobId</span>, search candidates by name/ID, generate CV summaries.</div>
     </div>
-    <div class="d-flex gap-2 align-items-center">
-      <button id="refreshBtn" class="btn btn-outline-light">Refresh candidates</button>
-      <span id="cacheInfo" class="pill muted">cache</span>
+    <div class="d-flex flex-column gap-2 align-items-end">
+      <div class="d-flex gap-2 align-items-center">
+        <button id="sendAllAlertsBtn" class="btn btn-slack" title="Send Slack alerts for all qualifying candidates">Alert All to Slack</button>
+        <button id="generateCacheBtn" class="btn btn-outline-light" title="Pre-generate summaries for ML Engineer candidates">Generate Cache</button>
+        <button id="refreshBtn" class="btn btn-outline-light">Refresh candidates</button>
+        <span id="cacheInfo" class="pill muted">cache</span>
+      </div>
+      <div class="threshold-controls d-flex gap-3 align-items-center">
+        <span class="threshold-label">Min scores:</span>
+        <div class="threshold-item">
+          <label for="threshExp">Exp</label>
+          <input type="number" id="threshExp" class="threshold-input" min="1" max="10" value="7">
+        </div>
+        <div class="threshold-item">
+          <label for="threshEdu">Edu</label>
+          <input type="number" id="threshEdu" class="threshold-input" min="1" max="10" value="7">
+        </div>
+        <div class="threshold-item">
+          <label for="threshPub">Pub</label>
+          <input type="number" id="threshPub" class="threshold-input" min="1" max="10" value="7">
+        </div>
+        <div class="threshold-item">
+          <label for="threshSkills">Skills</label>
+          <input type="number" id="threshSkills" class="threshold-input" min="1" max="10" value="7">
+        </div>
+        <div class="threshold-item">
+          <label for="threshComm">Comm</label>
+          <input type="number" id="threshComm" class="threshold-input" min="1" max="10" value="7">
+        </div>
+      </div>
     </div>
   </div>
 
@@ -98,13 +248,52 @@
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span class="ms-2">Working… (download resume + call Claude)</span>
             </div>
+            <button id="slackBtn" class="btn btn-slack btn-sm">Send to Slack</button>
             <button id="copyBtn" class="btn btn-outline-light btn-sm">Copy</button>
           </div>
         </div>
 
         <hr />
 
-        <pre id="summaryOut">Select a candidate and click “Generate summary”.</pre>
+        <div id="summaryContainer">
+          <div id="summaryPlaceholder" class="summary-placeholder">
+            Select a candidate and click "Generate summary".
+          </div>
+          <div id="summaryContent" class="d-none">
+            <!-- Frontier lab indicator -->
+            <div id="frontierIndicator" class="frontier-indicator not-frontier">
+              <div class="frontier-icon">⚡</div>
+              <div class="frontier-text">
+                <div class="frontier-label">Frontier AI Lab</div>
+                <div id="frontierValue" class="frontier-value">No</div>
+              </div>
+            </div>
+
+            <!-- Summary text -->
+            <div class="mb-4">
+              <div class="section-header">Summary</div>
+              <div id="summaryText" class="summary-text"></div>
+            </div>
+
+            <!-- Scorecard -->
+            <div class="mb-4">
+              <div class="section-header">Scorecard</div>
+              <div id="scorecard" class="scorecard"></div>
+            </div>
+
+            <!-- Key highlights -->
+            <div class="mb-4">
+              <div class="section-header">Key Highlights</div>
+              <ul id="highlightsList" class="highlight-list"></ul>
+            </div>
+
+            <!-- Red flags -->
+            <div class="mb-4">
+              <div class="section-header">Red Flags / Gaps</div>
+              <ul id="flagsList" class="flag-list"></ul>
+            </div>
+          </div>
+        </div>
         <div class="muted small mt-2" id="errorOut"></div>
       </div>
     </div>

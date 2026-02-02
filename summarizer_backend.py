@@ -232,6 +232,7 @@ SCORING RULES:
 - If education is not mentioned clearly, education score should be <= 3.
 - Provide 3-5 key highlights and 1-3 red flags/gaps.
 - Write a 2-4 sentence professional summary.
+- For the professional experience, make special attention to the previous companies they've worked at, ensuring it is taken into account for the score, and always signalled in the rationale for the professional experience score.
 - Set is_frontier_lab to true if the candidate CURRENTLY works at a frontier AI lab (OpenAI, Anthropic, Google DeepMind, Meta AI/FAIR, xAI, Cohere, Mistral, Inflection AI). Set frontier_lab_name to the lab name, or empty string if not applicable."""
 
         try:
