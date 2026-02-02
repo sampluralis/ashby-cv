@@ -118,8 +118,93 @@ class AshbyCandidateSummarizer:
             print(f"    Error downloading/parsing resume: {e}")
             return ""
 
+    # JSON schema for structured output
+    SUMMARY_SCHEMA = {
+        "type": "object",
+        "properties": {
+            "scorecard": {
+                "type": "object",
+                "properties": {
+                    "past_experience": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "integer"},
+                            "rationale": {"type": "string"}
+                        },
+                        "required": ["score", "rationale"],
+                        "additionalProperties": False
+                    },
+                    "education": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "integer"},
+                            "rationale": {"type": "string"}
+                        },
+                        "required": ["score", "rationale"],
+                        "additionalProperties": False
+                    },
+                    "publications_research": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "integer"},
+                            "rationale": {"type": "string"}
+                        },
+                        "required": ["score", "rationale"],
+                        "additionalProperties": False
+                    },
+                    "skills_tooling": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "integer"},
+                            "rationale": {"type": "string"}
+                        },
+                        "required": ["score", "rationale"],
+                        "additionalProperties": False
+                    },
+                    "communication_clarity": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "integer"},
+                            "rationale": {"type": "string"}
+                        },
+                        "required": ["score", "rationale"],
+                        "additionalProperties": False
+                    },
+                    "overall_fit": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "integer"},
+                            "rationale": {"type": "string"}
+                        },
+                        "required": ["score", "rationale"],
+                        "additionalProperties": False
+                    }
+                },
+                "required": ["past_experience", "education", "publications_research", "skills_tooling", "communication_clarity", "overall_fit"],
+                "additionalProperties": False
+            },
+            "summary": {"type": "string"},
+            "key_highlights": {
+                "type": "array",
+                "items": {"type": "string"}
+            },
+            "red_flags": {
+                "type": "array",
+                "items": {"type": "string"}
+            },
+            "is_frontier_lab": {"type": "boolean"},
+            "frontier_lab_name": {"type": "string"}
+        },
+        "required": ["scorecard", "summary", "key_highlights", "red_flags", "is_frontier_lab", "frontier_lab_name"],
+        "additionalProperties": False
+    }
+
+    def _format_summary(self, data: Dict) -> str:
+        """Convert structured summary JSON into formatted string."""
+        return json.dumps(data, indent=2)
+
     def generate_summary(self, candidate_data: Dict, resume_text: str = "", detailed: bool = True) -> str:
-        """Generate AI summary using Claude with a scorecard in the same text."""
+        """Generate AI summary using Claude with structured output for guaranteed schema compliance."""
         cand = candidate_data.get("candidate", candidate_data) or {}
 
         name = cand.get("name", "Unknown")
@@ -139,56 +224,45 @@ class AshbyCandidateSummarizer:
         if not snippet:
             snippet = "No resume text available."
 
-        # Choose scoring strictness: 0–10 should reflect evidence in resume.
         prompt = f"""You are screening a candidate using ONLY the resume text provided. Do not invent details.
-    If something is missing/unclear, score conservatively and say "not enough info" in the rationale.
+If something is missing/unclear, score conservatively and note "not enough info" in the rationale.
 
-    Candidate:
-    - Name: {name}
-    - Email: {email}
-    - Location: {location}
+Candidate:
+- Name: {name}
+- Email: {email}
+- Location: {location}
 
-    Resume text:
-    \"\"\"{snippet}\"\"\"
+Resume text:
+\"\"\"{snippet}\"\"\"
 
-    Return a SINGLE plain-text output in this exact format:
-
-    SCORECARD (0–10)
-    - Past experience: X/10 — <one short rationale>
-    - Education: X/10 — <one short rationale>
-    - Publications/Research: X/10 — <one short rationale>
-    - Skills/Tooling: X/10 — <one short rationale>
-    - Communication/Clarity: X/10 — <one short rationale>
-    - Overall fit: X/10 — <one short rationale>
-
-    SUMMARY (2–4 sentences)
-    <short professional summary>
-
-    KEY HIGHLIGHTS (bullets)
-    - ...
-    - ...
-    - ...
-
-    RED FLAGS / GAPS (bullets)
-    - ...
-    - ...
-
-    NOTES
-    - Keep the scorecard consistent with the resume evidence.
-    - If no publications are mentioned, Publications/Research should be <= 3/10.
-    - If education is not mentioned clearly, Education should be <= 3/10.
-    - Use whole numbers only (no decimals).
-    """
+SCORING RULES:
+- Keep scores consistent with the resume evidence (0-10 scale).
+- If no publications are mentioned, publications_research score should be 1.
+- If education is not mentioned clearly, education score should be <= 3.
+- Provide 3-5 key highlights and 1-3 red flags/gaps.
+- Write a 2-4 sentence professional summary.
+- Set is_frontier_lab to true if the candidate CURRENTLY works at a frontier AI lab (OpenAI, Anthropic, Google DeepMind, Meta AI/FAIR, xAI, Cohere, Mistral, Inflection AI). Set frontier_lab_name to the lab name, or empty string if not applicable."""
 
         try:
             msg = self.claude_client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=900 if detailed else 500,
+                model="claude-sonnet-4-5-20250929",
+                max_tokens=4096 if detailed else 4096,
                 temperature=0,
                 messages=[{"role": "user", "content": prompt}],
+                output_config={
+                    "format": {
+                        "type": "json_schema",
+                        "schema": self.SUMMARY_SCHEMA
+                    }
+                }
             )
             out = "".join(getattr(block, "text", "") for block in msg.content).strip()
-            return out or "No text returned by model."
+            if not out:
+                return "Error: No text returned by model."
+            data = json.loads(out)
+            return self._format_summary(data)
+        except json.JSONDecodeError as e:
+            return f"Error: JSON parsing failed - {e}"
         except Exception as e:
             return f"Error generating summary: {e}"
 
